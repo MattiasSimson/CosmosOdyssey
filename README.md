@@ -32,6 +32,7 @@ git clone https://github.com/MattiasSimson/CosmosOdyssey
 
 2. Install dependencies
 ```bash
+cd CosmosOdyssey
 cd cosmos-odyssey
 npm install
 ```
