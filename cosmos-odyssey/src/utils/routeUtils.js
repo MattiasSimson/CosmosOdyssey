@@ -250,7 +250,7 @@ export function findRouteGap(route, providers) {
     return segments;
 }
 
-// ALL possible routes between two planets
+// "ALL" possible routes between two planets
 export function findAllRoutes(legs, fromPlanet, toPlanet) {
     const connections = {};
     legs.forEach(leg => {
