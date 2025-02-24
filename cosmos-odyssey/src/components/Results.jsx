@@ -960,24 +960,19 @@ export default function Results({ searchResults, searchSuccess }) {
     const [filter, setFilter] = React.useState('fastest');
     const [directOnly, setDirectOnly] = React.useState(false);
     const [routes, setRoutes] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(false);
     const [rawRoutes, setRawRoutes] = React.useState([]);
     const [selectedCompanies, setSelectedCompanies] = React.useState(() => new Set());
     const [availableCompanies, setAvailableCompanies] = React.useState([]);
 
     // Process search results into raw routes and extract companies
     React.useEffect(() => {
-        // Reset state when there are no valid search results
         if (!searchResults?.legs?.length || !searchResults.selectedRoute) {
             setRawRoutes([]);
             setRoutes([]);
             setAvailableCompanies([]);
             setSelectedCompanies(new Set());
-            setIsLoading(false);
             return;
         }
-
-        setIsLoading(true);
         
         const companies = new Set();
         searchResults.legs.forEach(leg => {
@@ -994,7 +989,6 @@ export default function Results({ searchResults, searchSuccess }) {
             const toPlanet = searchResults.selectedRoute.to;
             const allRoutes = findAllRoutes(searchResults.legs, fromPlanet, toPlanet);
             setRawRoutes(allRoutes);
-            setIsLoading(false);
         }, 100);
     }, [searchResults]);
 
@@ -1002,11 +996,8 @@ export default function Results({ searchResults, searchSuccess }) {
     React.useEffect(() => {
         if (rawRoutes.length === 0) {
             setRoutes([]);
-            setIsLoading(false);
             return;
         }
-
-        setIsLoading(true);
         
         setTimeout(() => {
             let filteredByDirect = rawRoutes;
@@ -1032,7 +1023,6 @@ export default function Results({ searchResults, searchSuccess }) {
             });
 
             setRoutes(sortedRoutes.map(r => r.route));
-            setIsLoading(false);
         }, 100);
     }, [rawRoutes, filter, directOnly, selectedCompanies]);
 
@@ -1062,28 +1052,6 @@ export default function Results({ searchResults, searchSuccess }) {
                 margin: '0 auto',
                 padding: '20px'
             }}>
-                {/* Loading Bar */}
-                {isLoading && (
-                    <Box sx={{ width: '100%', mb: 3 }}>
-                        <Typography sx={{ 
-                            color: 'var(--celestial-blue)',
-                            textAlign: 'center',
-                            mb: 1
-                        }}>
-                            {filter === 'fastest' ? 'Finding fastest routes...' : 'Finding cheapest routes...'}
-                        </Typography>
-                        <LinearProgress sx={{
-                            backgroundColor: 'var(--indigo-dye)',
-                            height: 8,
-                            borderRadius: 4,
-                            '& .MuiLinearProgress-bar': {
-                                backgroundColor: 'var(--celestial-blue)',
-                                borderRadius: 4
-                            }
-                        }} />
-                    </Box>
-                )}
-
                 {/* Filters */}
                 <Box sx={{ 
                     marginBottom: '20px',
