@@ -109,5 +109,6 @@ The application integrates with the Cosmos Odyssey API:
 
 - ReactJS Timer: https://dev.to/yuridevat/how-to-create-a-timer-with-react-7b9
 - BroCode: https://www.youtube.com/@BroCodez
+- Claude AI (for fixing all of the annoying stuff and helping me understand concepts)
 
 
