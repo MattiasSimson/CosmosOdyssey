@@ -28,7 +28,7 @@ A React-based space travel booking application that allows users to search and b
 
 1. Clone the repository
 ```bash
-git clone 
+git clone https://github.com/MattiasSimson/CosmosOdyssey/tree/main/cosmos-odyssey
 ```
 
 2. Install dependencies
@@ -109,5 +109,6 @@ The application integrates with the Cosmos Odyssey API:
 
 - ReactJS Timer: https://dev.to/yuridevat/how-to-create-a-timer-with-react-7b9
 - BroCode: https://www.youtube.com/@BroCodez
+- Claude AI (for fixing all of the annoying stuff and helping me understand concepts)
 
 
