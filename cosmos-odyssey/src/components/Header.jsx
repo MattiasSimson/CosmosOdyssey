@@ -1,4 +1,4 @@
-// IMPORTS
+
 
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
@@ -12,7 +12,7 @@ import rocketLogo from '../assets/rocket-svgrepo-com.svg';
 import '../Colors.css';  
 
 
-// Header
+// header
 export default function Header() {
   const location = useLocation();
 

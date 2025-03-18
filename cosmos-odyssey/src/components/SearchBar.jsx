@@ -15,8 +15,8 @@ import { addPricelist } from '../utils/db';
 import '../Colors.css';  
 
 export default function SearchBar() {
-    // state for controlling animations
-    const [checked, setChecked] = React.useState(false);
+    // state for controlling animations (if they fly etc.)
+    const [checked, setChecked] = useState(false);
     
     // state for tracking if search was successful 
     const [searchSuccess, setSearchSuccess] = useState(false);
@@ -39,7 +39,8 @@ export default function SearchBar() {
     const [searchResults, setSearchResults] = useState(null);
 
     // handle search validation (if they do be filled)
-    const handleSearch = async (event) => {
+    // async function allows the use of await within it, pauses the execution until the promise is resolved
+    const handleSearch = async function(event) {
         const fromInput = document.querySelector('#from-autocomplete');
         const toInput = document.querySelector('#to-autocomplete');
         
@@ -66,10 +67,11 @@ export default function SearchBar() {
             
             const data = await response.json();
             
-            // Store the pricelist
+            // store the pricelist
             addPricelist(data);
             
-            // Pass all legs along with the selected planets
+            // pass all legs along with the selected planets
+            // legs = routes
             setSearchResults({ 
                 ...data, 
                 selectedRoute: {
@@ -105,6 +107,7 @@ export default function SearchBar() {
     };
 
     // gets planets from the API
+    // maybe with a useEffect?
     const fetchPlanets = async () => {
         try {
             const response = await fetch(BASE_URL, {
@@ -120,7 +123,7 @@ export default function SearchBar() {
             
             const data = await response.json();
             
-            // Store the pricelist
+            // store the pricelist
             addPricelist(data);
             
             // extract unique planet names from legs

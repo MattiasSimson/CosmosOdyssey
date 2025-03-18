@@ -17,8 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import LinearProgress from '@mui/material/LinearProgress';
 import Chip from '@mui/material/Chip';
+
 import { addReservation } from '../utils/db';
 import {
     calculateRouteDetails,
@@ -29,7 +29,7 @@ import {
     findAllRoutes
 } from '../utils/routeUtils';
 
-// ErrorBoundary to catch and handle rendering errors for individual routes
+// catch and handle rendering errors for individual routes
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
@@ -44,6 +44,7 @@ class ErrorBoundary extends React.Component {
         console.error('Error caught by boundary:', error, errorInfo);
     }
 
+    // shows stuff
     render() {
         if (this.state.hasError) {
             return (
@@ -78,7 +79,7 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-// Component for displaying and managing individual route options
+// component for displaying and managing individual route options
 function RouteOption({ route, filter, selectedCompanies }) {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [modalOpen, setModalOpen] = React.useState(false);
@@ -91,7 +92,7 @@ function RouteOption({ route, filter, selectedCompanies }) {
         }
     });
 
-    // Update selected providers when filter or route changes
+    // update selected providers when filter or route changes
     React.useEffect(() => {
         try {
             const bestProviders = findBestProviderCombination(route, filter, selectedCompanies);
@@ -127,7 +128,7 @@ function RouteOption({ route, filter, selectedCompanies }) {
         });
     };
 
-    // Handle removal confirmation dialog
+    // handle removal confirmation dialog
     const handleRemovalConfirmationClose = (confirmed) => {
         if (confirmed && removalConfirmation) {
             const { index, providers } = removalConfirmation;
@@ -147,7 +148,7 @@ function RouteOption({ route, filter, selectedCompanies }) {
 
     const routePath = route.map(leg => leg.routeInfo.from.name).concat(route[route.length - 1].routeInfo.to.name);
 
-    // Create booking object with validation
+    // create booking object with validation
     const booking = selectedProviders && 
         selectedProviders.length === route.length && 
         selectedProviders.some(provider => provider !== null) ? {
@@ -169,6 +170,8 @@ function RouteOption({ route, filter, selectedCompanies }) {
         bookingDate: new Date().toISOString()
     } : null;
 
+
+    // return all of the UI stuff
   return (
         <Box sx={{ 
             border: '1px solid var(--celestial-blue)',

@@ -35,7 +35,7 @@ import {
 import '../Colors.css';
 import Timer from '../components/Timer';
 
-// Helper function to get pricelist status
+// helper function to get pricelist status
 function getPricelistStatus(pricelists, pricelistId) {
     const pricelist = pricelists.find(pl => pl.id === pricelistId);
     if (!pricelist) return { status: 'expired' };
@@ -60,16 +60,17 @@ function getPricelistStatus(pricelists, pricelistId) {
     };
 }
 
-// Component for displaying reservations
+// component for displaying reservations
 export default function Reservations() {
-    const [reservations, setReservations] = React.useState([]);
-    const [stats, setStats] = React.useState(null);
-    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
-    const [selectedReservation, setSelectedReservation] = React.useState(null);
-    const [clearDialogOpen, setClearDialogOpen] = React.useState(false);
-    const [pricelists, setPricelists] = React.useState([]);
 
-    // Load data from database
+    const [reservations, setReservations] = React.useState([]); // usestate to store the reservation
+    const [stats, setStats] = React.useState(null); // store the "stats"
+    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false); // inits a delete dialog (false, since its not open)
+    const [selectedReservation, setSelectedReservation] = React.useState(null); // haven't selected anything
+    const [clearDialogOpen, setClearDialogOpen] = React.useState(false); // nothing is open
+    const [pricelists, setPricelists] = React.useState([]); // stores the price list
+
+    // load data from database
     const loadData = React.useCallback(() => {
         const allReservations = getAllReservations();
         const allPricelists = getAllPricelists();
@@ -78,11 +79,12 @@ export default function Reservations() {
         setStats(getDbStats());
     }, []);
 
+    // loads the data once
     React.useEffect(() => {
         loadData();
     }, [loadData]);
 
-    // Group reservations by passenger name
+    // group reservations by passenger name
     const groupedReservations = React.useMemo(() => {
         const groups = {};
         reservations.forEach(reservation => {
@@ -95,7 +97,7 @@ export default function Reservations() {
         return groups;
     }, [reservations]);
 
-    // Handle reservation deletion
+    // handle reservation deletion
     const handleDelete = () => {
         if (selectedReservation) {
             deleteReservation(selectedReservation.id);
@@ -105,13 +107,14 @@ export default function Reservations() {
         }
     };
 
-    // Handle database clear
+    // handle database clearing
     const handleClearDb = () => {
         clearDb();
         loadData();
         setClearDialogOpen(false);
     };
 
+    // return and UI
     return (
         <Box sx={{ 
             padding: '20px',
