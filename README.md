@@ -27,8 +27,11 @@ A React-based space travel booking application that allows users to search and b
 ### Installation
 
 1. Clone the repository
+   
 ```bash
 git clone https://github.com/MattiasSimson/CosmosOdyssey
+
+```
 
 2. Install dependencies
 ```bash
