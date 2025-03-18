@@ -1,44 +1,64 @@
-const timeThingy = (1000 * 60 * 60); // ms to hours
+const timeThingy = (1000 * 60 * 60); // conversion from milliseconds to hours
 
 // helper function to calculate duration in hours between two dates
 export function calculateDuration(flightStart, flightEnd) {
+    // convert flightStart to a Date object
     const start = new Date(flightStart);
+    
+    // convert flightEnd to a Date object
     const end = new Date(flightEnd);
-    return (end - start) / timeThingy;
+    
+    // calculate the difference in time between the two dates in milliseconds
+    const durationInMilliseconds = end - start;
+    
+    // convert the duration from milliseconds to hours using the conversion factor
+    const durationInHours = durationInMilliseconds / timeThingy;
+    
+    // return the duration in hours
+    return durationInHours;
 }
 
 // calculate total distance, time, and price for a route
 export function calculateRouteDetails(route, selectedProviders) {
+    // check if the inputs are valid arrays, if not, log a warning and return default values
     if (!route || !Array.isArray(route) || !selectedProviders || !Array.isArray(selectedProviders)) {
         console.warn('Invalid inputs to calculateRouteDetails:', { route, selectedProviders });
         return { distance: 0, time: 0, price: 0 };
     }
 
+    // initialize variables to add total distance, time, and price
     let totalDistance = 0;
     let totalTime = 0;
     let totalPrice = 0;
 
+    // iterate over each leg of the route
     route.forEach((leg, index) => {
+        // check if the leg has valid route information, specifically distance
         if (!leg?.routeInfo?.distance) {
-            console.warn('Invalid leg:', leg);
-            return;
+            return; // skip this leg if it's invalid
         }
 
+        // get the corresponding provider for the current leg
         const provider = selectedProviders[index];
-        if (!provider) return;
+        if (!provider) return; // skip if no provider is found for this leg
 
+        // add the distance of the current leg to the total distance
         totalDistance += leg.routeInfo.distance;
         try {
+            // calculate the duration of the flight using the provider's start and end times
             const duration = calculateDuration(provider.flightStart, provider.flightEnd);
+            // check if the calculated duration is a valid number
             if (!isNaN(duration)) {
-                totalTime += duration;
+                totalTime += duration; // add the duration to the total time
             }
+            // add the price of the current leg to the total price, defaulting to 0 if undefined
             totalPrice += provider.price || 0;
         } catch (error) {
-            console.warn('Error calculating times:', error);
+            // log a warning if there is an error in calculating times
         }
     });
 
+    // return an object containing the total distance, time (rounded down to the nearest hour), and price
     return {
         distance: totalDistance,
         time: Math.floor(totalTime),
@@ -108,7 +128,7 @@ export function validateConnectingFlights(selectedProviders, allowPartial = fals
     return { valid: true };
 }
 
-// Check if a route is complete (no gaps)
+// check if a route is complete (no weird gaps)
 export function isRouteComplete(providers) {
     if (!providers || providers.length === 0) return false;
     
@@ -139,20 +159,26 @@ export function findBestProviderCombination(route, filter, selectedCompanies) {
             const flightEnd = new Date(provider.flightEnd);
             return flightEnd > flightStart && selectedCompanies.has(provider.company.name);
         });
+        if (validProviders.length === 0) {
+            return [];
+        }
 
-        if (validProviders.length === 0) return [];
-
-        const sortedProviders = validProviders.sort((a, b) => {
+        // sort providers based on the filter
+        const sortedProviders = validProviders.sort(function(a, b) {
             if (filter === 'fastest') {
+                // if the filter is 'fastest', sort by duration
                 return calculateDuration(a.flightStart, a.flightEnd) - calculateDuration(b.flightStart, b.flightEnd);
+            } else {
+                // otherwise, sort by price
+                return a.price - b.price;
             }
-            return a.price - b.price;
         });
 
         return [sortedProviders[0]];
     }
 
     // multi routes
+    // this i DO NOT UNDERSTAND!!
     let bestCombination = null;
     let bestMetric = Infinity;
 
@@ -224,7 +250,7 @@ export function findBestProviderCombination(route, filter, selectedCompanies) {
     return bestCombination || [];
 }
 
-// Find gaps in the route after provider removal (I had issues with it creating gaps)
+// find gaps in the route after provider removal (I had issues with it creating gaps)
 export function findRouteGap(route, providers) {
     let segments = [];
     let currentFrom = null;
